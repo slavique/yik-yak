@@ -1,13 +1,26 @@
 var express = require('express');
 var router = express.Router();
+var ZoneController = require('../controllers/ZoneController');
 
 router.get('/:resource', function(req, res, next) {
-	var resource = req.params.resource
+	var resource = req.params.resource;
 
-	res.json({
-		confirmation: 'success',
-		resource: resource
-	})
-})
+	if(resource == 'zone') {
+		ZoneController.find(req.query, function(err, results) {
+			if(err) {
+				res.json({
+					confirmation: 'fail',
+					message: err
+				});
+				return
+			}
 
-module.exports = router
+			res.json({
+				confirmation: 'success',
+				resource: results
+			})
+		})
+	}
+});
+
+module.exports = router;

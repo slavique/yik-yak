@@ -1,4 +1,4 @@
-var mongoose = require('git status');
+var mongoose = require('mongoose');
 
 var CommentSchema = new mongoose.Schema({
 	username : {type:String, default: ''},
