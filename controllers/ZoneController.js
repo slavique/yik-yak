@@ -10,16 +10,48 @@ module.exports = {
             callback(null, zones)
         })
     },
-    findById: function() {
-
+    findById: function(id, callback) {
+        Zone.findById(id, function(err, zone) {
+            if(err) {
+                callback(err, null);
+                return
+            }
+            callback(null, zone)
+        })
     },
-    create: function() {
+    create: function(params, callback) {
+        var zipString = params['zipCodes'];
+        var zipArr = zipString.split(',');
+        var zipCodes = [];
+        zipArr.forEach(function(zipCode) {
+            zipCodes.push(zipCode.trim())
+        });
+        params['zipCodes'] = zipCodes;
 
+        Zone.create(params, function(err, zone) {
+            if(err) {
+                callback(err, null);
+                return
+            }
+            callback(null, zone)
+        })
     },
-    update: function() {
-
+    update: function(id, params, callback) {
+        Zone.findByIdAndUpdate(id, params, {new:true}, function(err, zone) {
+            if (err) {
+                callback(err, null);
+                return
+            }
+            callback(null, zone)
+        })
     },
-    destroy: function() {
-
+    delete: function(id, callback) {
+        Zone.findByIdAndRemove(id, function(err) {
+            if (err) {
+                callback(err, null);
+                return
+            }
+            callback(null, zone)
+        })
     }
 };
