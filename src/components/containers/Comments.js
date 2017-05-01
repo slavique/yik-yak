@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import superagent from 'superagent'
 import Comment from '../presentation/Comment'
 import styles from './styles'
 
@@ -11,13 +12,24 @@ class Comments extends Component {
 				body: '',
 				timestamp: ''
 			},
-			list: [
-				{username: "David", body: 'this is awesome!', timestamp: '10:15'},
-				{username: "Steve", body: "i don't think so", timestamp: '11:45'},
-				{username: "Mark", body: 'screw you!!!', timestamp: '11:55'},
-				{username: "Alex", body: 'i have a little', timestamp: '10:15'}
-			]
+			list: []
 		}
+	}
+	componentDidMount() {
+		superagent
+		.get('/api/comment')
+		.query(null)
+		.set('Accept', 'application/json')
+		.end((err, response) => {
+			if (err) {
+				alert('ERROR' + err)
+				return
+			}
+			let results = response.body.results
+			this.setState({
+				list: results
+			})
+		})
 	}
 
 	submitComment() {

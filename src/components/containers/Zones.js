@@ -1,19 +1,54 @@
 import React, {Component} from 'react'
 import Zone from '../presentation/Zone'
+import superagent from 'superagent'
 
 class Zones extends Component {
 	constructor() {
 		super()
 		this.state = {
-			list: [
-				{name: "Zone1", zipCode: "10012", numComments: 10},
-				{name: "Zone2", zipCode: "12233", numComments: 23},
-				{name: "Zone3", zipCode: "23366", numComments: 40},
-				{name: "Zone4", zipCode: "99988", numComments: 30},
-				{name: "Zone5", zipCode: "33555", numComments: 60}
-			]
+			newZone: {
+				name: '',
+				zipCodes: ''
+			},
+			list: []
 		}
 	}
+componentDidMount() {
+	console.log('componentDidMount');
+	superagent
+	.get('/api/zone')
+	.query(null)
+	.set('Accept', 'application/json')
+	.end((err, response) => {
+		if (err) {
+			alert('ERROR' + err)
+			return
+		}
+		console.log(JSON.stringify(response.body))
+		let results = response.body.results
+		this.setState({
+			list: results
+		})
+	})
+}
+
+	submitNewZone() {
+		console.log('submitNewZonne')
+		let updatedList = Object.assign([], this.state.list);
+		updatedList.push(this.state.newZone);
+		this.setState({
+			list: updatedList
+		})
+	}	
+
+	updateZone(event) {
+		let newZone = Object.assign({}, this.state.newZone);
+		newZone[event.target.id] = event.target.value
+		this.setState({
+			newZone: newZone
+		})
+	}
+
 	render() {
 		const listItems = this.state.list.map((zone, i) => {
 			return (
@@ -25,6 +60,9 @@ class Zones extends Component {
 				<ol>
 					{listItems}
 				</ol>
+				<input id="name" onChange={this.updateZone.bind(this)} className='form-control' type="text" placeholder="Name"></input><br/>
+				<input id="zipCode" onChange={this.updateZone.bind(this)} className='form-control' type="text" placeholder="ZipCode"></input><br/>
+				<button onClick={this.submitNewZone.bind(this)} className='btn btn-danger'>Add New Zone</button>
 			</div>
 		)
 	}
