@@ -20,13 +20,13 @@ module.exports = {
         })
     },
     create: function(params, callback) {
-        var zipString = params['zipCodes'];
-        var zipArr = zipString.split(',');
-        var zipCodes = [];
-        zipArr.forEach(function(zipCode) {
-            zipCodes.push(zipCode.trim())
-        });
-        params['zipCodes'] = zipCodes;
+        // var zipString = params['zipCodes'];
+        // var zipArr = zipString.split(',');
+        // var zipCodes = [];
+        // zipArr.forEach(function(zipCode) {
+        //     zipCodes.push(zipCode.trim())
+        // });
+        // params['zipCodes'] = zipCodes;
 
         Zone.create(params, function(err, zone) {
             if(err) {
